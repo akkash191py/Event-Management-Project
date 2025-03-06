@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
@@ -8,6 +9,8 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from Events.models import Organizer, Venue, Event, Participant
 from Events.serializers import OrganizerSerializer, VenueSerializer, EventSerializer, ParticipantSerializer
+from Events.pagination import CustomPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 
@@ -41,16 +44,18 @@ class VenueListCreateAPIView(APIView):
 class VenueDetailAPIView(APIView):
     def get(self, request, pk):
         venue = get_object_or_404(Venue, pk=pk)
-        serializer = VenueSerializer(venue)
-        return Response(serializer.data)
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(events, request)
+        venueserializerData = VenueSerializer(venue, many=True)
+        return Response(venueserializerData.data)
 
     def put(self, request, pk):
         venue = get_object_or_404(Venue, pk=pk)
-        serializer = VenueSerializer(venue, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        venueserializerData = VenueSerializer(venue, data=request.data)
+        if venueserializerData.is_valid():
+            venueserializerData.save()
+            return Response(venueserializerData.data)
+        return Response(venueserializerData.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         venue = get_object_or_404(Venue, pk=pk)
@@ -60,22 +65,36 @@ class VenueDetailAPIView(APIView):
 
 # Event List API
 class EventListCreateAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         events = Event.objects.all()
-        serializer = EventSerializer(events, many=True)
-        return Response(serializer.data)
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(events, request)
+        filter_backends = [DjangoFilterBackend]
+        filterset_fields = ['name', 'organizer__name', 'venue']
+        EventserializerData = EventSerializer(events, many=True)
+        return paginator.get_paginated_response(EventserializerData.data)
 
     def post(self, request):
-        serializer = EventSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        request.data['created_by'] = request.user.id
+        EventserializerData = EventSerializer(data=request.data)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if EventserializerData.is_valid():
+            EventserializerData.save()
+            return Response({"status": "success", "message":"Participant data Created successfully", "data":  EventserializerData.data}, status=status.HTTP_201_CREATED)
+
+        return Response(EventserializerData.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Event Detail API
 class EventDetailAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk):
         event = get_object_or_404(Event, pk=pk)
         serializer = EventSerializer(event)
@@ -83,35 +102,51 @@ class EventDetailAPIView(APIView):
 
     def put(self, request, pk):
         event = get_object_or_404(Event, pk=pk)
-        serializer = EventSerializer(event, data=request.data)
+
+        if event.created_by != request.user:
+            return Response({"error": "You do not have permission to edit this event."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = EventSerializer(event, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response({"status": "success","message":"Event data Updated successfully","data": serializer.data}, status=200) 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         event = get_object_or_404(Event, pk=pk)
+        if event.created_by != request.user:
+            return Response({"error": "You do not have permission to delete this event."}, status=status.HTTP_403_FORBIDDEN)
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
 # Participant List API
 class ParticipantListCreateAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         participantObj = Participant.objects.all()
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(participantObj, request)
         participantserializer = ParticipantSerializer(participantObj, many=True)
-        return Response(participantserializer.data)
+        return paginator.get_paginated_response(participantserializer.data)
 
     def post(self, request):
         participantserializer = ParticipantSerializer(data=request.data)
         if participantserializer.is_valid():
             participantserializer.save()
-            return Response(participantserializer.data, status=status.HTTP_201_CREATED)
+            return Response({"status": "success", "message":"Participant data Created successfully", "data":  participantserializer.data}, status=status.HTTP_201_CREATED)
         return Response(participantserializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Participant Detail API
 class ParticipantDetailAPIView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk):
         participantObj = get_object_or_404(Participant, pk=pk)
         serializer = ParticipantSerializer(participantObj)
@@ -119,27 +154,25 @@ class ParticipantDetailAPIView(APIView):
 
     def put(self, request, pk):
         participantObj = get_object_or_404(Participant, pk=pk)
-        participantserializer = ParticipantSerializer(participantObj, data=request.data)
+        participantserializer = ParticipantSerializer(participantObj, data=request.data, partial=True)
+
+        if participantObj.user != request.user.id:
+            return Response({"error": "You do not have permission to edit this event."}, status=status.HTTP_403_FORBIDDEN)
+
         if participantserializer.is_valid():
             participantserializer.save()
-            return Response(participantserializer.data)
+            return Response({"status": "success","message":"Participant data Updated successfully","data":  participantserializer.data}, status=200)
         return Response(participantserializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         participantObj = get_object_or_404(Participant, pk=pk)
+
+        if participantObj.user != request.user.id:
+            return Response({"error": "You do not have permission to delete this event."}, status=status.HTTP_403_FORBIDDEN)
+
         participantObj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 
     
-
-
-# {
-# "address" : "H.no 413, Sastur",
-# "street" : "Sparsh hospital",
-# "city" : "Pune",
-# "state" : "MH",
-# "postcode" : "413606",
-# "country" : "IN"
-# }

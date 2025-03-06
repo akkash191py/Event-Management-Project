@@ -47,6 +47,7 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     organizer = models.ForeignKey(Organizer, related_name='Organizer', on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, related_name='Venue', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -59,6 +60,7 @@ class Participant(models.Model):
     first_name = models.CharField(max_length=100,  blank=False, null=False)
     last_name = models.CharField(max_length=100,  blank=False, null=False)
     email = models.EmailField(unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, related_name="participants", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
