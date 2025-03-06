@@ -21,6 +21,12 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
 
+    
+    def validate(self, data):
+        if data['start_time'] >= data['end_time']:
+            raise serializers.ValidationError("Start time must be before end time.")
+        return data
+
 
 class ParticipantSerializer(serializers.ModelSerializer):
     class Meta:
