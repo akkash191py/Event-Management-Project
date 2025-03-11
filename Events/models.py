@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from UserAccount.models import User
 from Events.utils import COUNTRIES
 
 
@@ -61,7 +62,7 @@ class Participant(models.Model):
     last_name = models.CharField(max_length=100,  blank=False, null=False)
     email = models.EmailField(unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, related_name="participants", on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, related_name="participants", on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
