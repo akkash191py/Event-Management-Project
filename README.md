@@ -106,78 +106,79 @@
               
   3.  // POST http://127.0.0.1:8000/api/user/change-password/     ----- For Change the Password with Access Key
 
-              [Postman]
-             Headers: Key : Authorization
+            [Postman]
+            Headers: Key : Authorization
                      Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
-                  {
-                  "old_password": "AkashR@8335",
-                  "new_password": "Akash@9099"
-                 }
 
-   4.  // POST http://127.0.0.1:8000/api/user/forgot-password/       ---- User Fogot Password using email field and Password send to user email
+             {
+               "old_password": "AkashR@8335",
+               "new_password": "Akash@9099"
+            }
+
+ 4.  // POST http://127.0.0.1:8000/api/user/forgot-password/       ---- User Fogot Password using email field and Password send to user email
 
            {
               "email": "akashpanchal07@gmail.com"
           }
           
-  5 . // GET http://127.0.0.1:8000/api/organizer_details/ – List organizer
+5 . // GET http://127.0.0.1:8000/api/organizer_details/ – List organizer
        
-  6. // GET http://127.0.0.1:8000/api/events/ – List events
+6. // GET http://127.0.0.1:8000/api/events/ – List events
      
         [Postman]
         Headers: Key : Authorization
                  Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
      
-8.   // GET http://127.0.0.1:8000/api/events/?name=name         – # Fiter data from event list passing query parameters in the URL
+7.   // GET http://127.0.0.1:8000/api/events/?name=name         – # Fiter data from event list passing query parameters in the URL
      
-9.  // POST http://127.0.0.1:8000/api/events/ – Create an event
+8.  // POST http://127.0.0.1:8000/api/events/ – Create an event
 
      [Postman]
      Headers: Key : Authorization
               Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
                      
-10.  // GET http://127.0.0.1:8000/api/events/{id}/ – Retrieve an event
+9.  // GET http://127.0.0.1:8000/api/events/{id}/ – Retrieve an event
 
            [Postman]
             Headers: Key : Authorization
               Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
               
-11.  // PUT http://127.0.0.1:8000/api/events/{id}/ – Update an event
+10.  // PUT http://127.0.0.1:8000/api/events/{id}/ – Update an event
 
-      [Postman]
-      Headers: Key : Authorization
-              Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
+           [Postman]
+           Headers: Key : Authorization
+                    Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
 
-12.  // GET http://127.0.0.1:8000/api/venues/ – List venues
+11.  // GET http://127.0.0.1:8000/api/venues/ – List venues
 
       
-13.  // POST http://127.0.0.1:8000/api/venues/ – Create an venues
+12.  // POST http://127.0.0.1:8000/api/venues/ – Create an venues
 
-14.  // GET http://127.0.0.1:8000/api/venues/{id}/ – Retrieve an venues
+13.  // GET http://127.0.0.1:8000/api/venues/{id}/ – Retrieve an venues
      
-15.  // PUT /api/venues/{id}/ – Update an venues     
+14.  // PUT /api/venues/{id}/ – Update an venues     
       
        
-16.  // GET http://127.0.0.1:8000/api/participants/ – List participants
+15.  // GET http://127.0.0.1:8000/api/participants/ – List participants
 
-        [Postman]
-        Headers: Key : Authorization
-                 Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
+           [Postman]
+           Headers: Key : Authorization
+                    Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
         
     
-17.  // GET http://127.0.0.1:8000/api/participants/?email=email&first_name=first_name&last_name=last_name       # Fiter data from list passing query parameters in the URL
+16.  // GET http://127.0.0.1:8000/api/participants/?email=email&first_name=first_name&last_name=last_name       # Fiter data from list passing query parameters in the URL
            
-18.  // GET http://127.0.0.1:8000/api/participants/{id}/ – Retrieve an participants
+17.  // GET http://127.0.0.1:8000/api/participants/{id}/ – Retrieve an participants
 
-       [Postman]
-       Headers: Key : Authorization
-                Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
+          [Postman]
+          Headers: Key : Authorization
+                   Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
                 
- 19.  // PUThttp://127.0.0.1:8000 /api/participants/{id}/ – Update an participants
+ 18.  // PUThttp://127.0.0.1:8000 /api/participants/{id}/ – Update an participants
        
-       [Postman]
-       Headers: Key : Authorization
-                Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
+         [Postman]
+         Headers: Key : Authorization
+                  Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
     
 
     
