@@ -176,9 +176,9 @@
                 
  18.  // PUThttp://127.0.0.1:8000 /api/participants/{id}/ – Update an participants
        
-         [Postman]
-         Headers: Key : Authorization
-                  Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
+          [Postman]
+          Headers: Key : Authorization
+                   Value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3MjM3Nzk2LCJpYXQiOj
     
 
     
